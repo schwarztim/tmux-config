@@ -1,0 +1,18 @@
+[[session]]
+name = "Projects 📂"
+path = "~/Projects"
+search_subfolders = true
+
+[[session]]
+name = "Scripts 🔧"
+path = "~/Scripts"
+search_subfolders = true
+
+[[session]]
+name = "MCP Servers"
+path = "~/Scripts/mcp-servers"
+search_subfolders = true
+
+[[session]]
+name = "Home"
+path = "~"
