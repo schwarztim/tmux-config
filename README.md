@@ -1,6 +1,10 @@
-# tmux Configuration — Matrix Theme
+# tmux Configuration
 
-Terminal multiplexer setup with Matrix-inspired green-on-black theme, kitty integration, sesh session management, and a performance status bar.
+Terminal multiplexer setup that inherits your terminal's color theme, with kitty integration, sesh session management, and a performance status bar.
+
+## Recommended Terminal: kitty
+
+This config is designed for [kitty](https://sw.kovidgoyal.net/kitty/). tmux pushes the session name to kitty's tab title via `set-titles-string '#S'`, so project-based sessions like `bambu/frontend` show directly in the kitty tab bar. Any terminal that respects OSC title sequences will work, but kitty is recommended for the best experience.
 
 ## What's Included
 
@@ -13,7 +17,7 @@ Terminal multiplexer setup with Matrix-inspired green-on-black theme, kitty inte
 ## Dependencies
 
 - [tmux](https://github.com/tmux/tmux) 3.x+
-- [kitty](https://sw.kovidgoyal.net/kitty/) (terminal — optional, any terminal works)
+- [kitty](https://sw.kovidgoyal.net/kitty/) (recommended terminal)
 - [sesh](https://github.com/joshmedeski/sesh) (session manager)
 - [fzf](https://github.com/junegunn/fzf) (fuzzy finder)
 - [fd](https://github.com/sharkdp/fd) (file finder, used in sesh binding)
@@ -44,12 +48,22 @@ git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 chmod +x ~/.config/tmux/status.sh
 ```
 
+Or if you use [claude-rules](https://github.com/schwarztim/claude-rules), onboarding deploys this automatically:
+
+```bash
+cd ~/claude-rules && bin/onboard.sh
+```
+
 ## Features
 
-- **Matrix theme**: green (`#00ff41`) on black (`#0d0d0d`), minimal chrome
-- **Kitty integration**: session name pushed to terminal title via `set-titles`
+- **Theme-adaptive**: uses `default` colors — inherits whatever your terminal provides
+- **Kitty integration**: session name pushed to tab title via `set-titles`
 - **sesh + fzf**: `prefix + j` opens session picker with icons, zoxide, config views
 - **Performance bar**: CPU%, memory used/total, network throughput, battery + AC/DC
 - **Auto-rename**: windows named after current directory
 - **Mouse**: enabled
 - **Base-1 indexing**: windows and panes start at 1
+
+## Session Naming Convention
+
+Sessions are named `{project}/{label}` (e.g., `bambu/frontend`, `ms365-hub/api`). This integrates with the project-first tmux launcher in [claude-rules](https://github.com/schwarztim/claude-rules) and shows cleanly in kitty's tab bar.
