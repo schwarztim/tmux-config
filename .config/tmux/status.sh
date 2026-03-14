@@ -1,6 +1,6 @@
 #!/bin/bash
 # tmux status bar — system info (called every 5s)
-# Cross-platform: macOS + Linux
+# Cross-platform: macOS + Linux (including Asahi/Apple Silicon)
 
 export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 
@@ -43,7 +43,6 @@ if [[ "$OS" == "Darwin" ]]; then
       else printf "0B↑"
     }')
 else
-  # Snapshot /proc/net/dev, wait 1s, diff
   read_net() { awk '/:/{gsub(/:/," "); rx+=$2; tx+=$10} END{print rx, tx}' /proc/net/dev; }
   read -r rx1 tx1 <<< "$(read_net)"
   sleep 1
@@ -64,22 +63,23 @@ if [[ "$OS" == "Darwin" ]]; then
   batt=$(pmset -g batt 2>/dev/null | grep -o '[0-9]*%' | head -1)
   charging=$(pmset -g batt 2>/dev/null | grep -c 'AC Power')
   if [[ "$charging" -gt 0 ]]; then
-    power="AC:${batt}"
+    power="⚡${batt}"
   else
-    power="DC:${batt}"
+    power="🔋${batt}"
   fi
 else
-  bat_path=$(find /sys/class/power_supply/BAT* -maxdepth 0 2>/dev/null | head -1)
+  # Find battery: standard BAT* or Asahi macsmc-battery
+  bat_path=$(find /sys/class/power_supply/ -maxdepth 1 \( -name 'BAT*' -o -name '*battery' \) 2>/dev/null | head -1)
   if [[ -n "$bat_path" ]]; then
     batt=$(cat "$bat_path/capacity" 2>/dev/null)
     status=$(cat "$bat_path/status" 2>/dev/null)
     if [[ "$status" == "Charging" || "$status" == "Full" ]]; then
-      power="AC:${batt}%"
+      power="⚡${batt}%"
     else
-      power="DC:${batt}%"
+      power="🔋${batt}%"
     fi
   else
-    power="AC"
+    power="⚡AC"
   fi
 fi
 
